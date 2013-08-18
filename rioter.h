@@ -31,9 +31,8 @@ void update_rioter(rioter *r, lua_State *l) {
 
 int getinfo(lua_State *l) {
   rioter *r = (rioter*) lua_topointer(l, -1);
-  lua_pop(l, 1);
-  lua_pushinteger(l, r->y);
   lua_pushinteger(l, r->x);
+  lua_pushinteger(l, r->y);
   lua_pushinteger(l, r->anger);
   return 3;
 }
