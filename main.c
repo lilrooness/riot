@@ -69,6 +69,11 @@ void update_rioters(rioter *crowd, int n, lua_State *L) {
   }
 }
 
+int get_crowd(lua_State *l) {
+  lua_pushlightuserdata(l, crowd);
+  return 1;
+}
+
 lua_State* init_lua() {
   lua_State *L = luaL_newstate();
   luaL_openlibs(L);
@@ -79,6 +84,8 @@ lua_State* init_lua() {
   lua_setglobal(L, "SCREEN_W");
   lua_pushinteger(L, SCREEN_H);
   lua_setglobal(L, "SCREEN_H");
+  lua_register(L, "get_crowd", get_crowd);
+  lua_register(L, "get_prox_rioters", get_prox_rioters);
   return L;
 }
 

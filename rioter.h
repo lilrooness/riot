@@ -2,6 +2,7 @@
 #include <lua.h>
 #include <lualib.h>
 #include <lauxlib.h>
+#include <math.h>
 
 struct rioter{
   int x;
@@ -47,4 +48,33 @@ int setinfo(lua_State *l) {
   r->x = lua_tointeger(l, -1);
   lua_pop(l, 1);
   return 0;
+}
+
+int get_prox_rioters(lua_State *l) {
+  rioter *crowd =(rioter*) lua_topointer(l, -1);
+  lua_pop(l, 1);
+  int len = lua_tointeger(l, -1);
+  lua_pop(l, 1);
+  rioter *r = (rioter*) lua_topointer(l, -1);
+  lua_pop(l, 1);
+  double prox = lua_tonumber(l, -1);
+  lua_pop(l, 1);
+  rioter *prox_rioters[len];
+  int prox_len = 0;
+ 
+
+  double current_x;
+  double current_y;
+  double r_x = r->x;
+  double r_y = r->y;
+
+  int i=0;
+  for(i=0; i<len; i++) {
+    current_x = crowd[i].x;
+    current_y = crowd[i].y;
+    if(sqrt((current_x - r_x)+(current_y - r_y)) < prox) {
+      prox_rioters[prox_len] = &crowd[i];
+      prox_len++;
+    }
+  }
 }
