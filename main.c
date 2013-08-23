@@ -59,6 +59,8 @@ void init_rioters(int n, rioter *croud) {
   for(i=0; i<n; i++) {
     crowd[i].x = rand() % SCREEN_W;
     crowd[i].y = rand() % SCREEN_H;
+    crowd[i].vx = rand() % 5;
+    crowd[i].vy = rand() % 5;
   }
 }
 
@@ -69,9 +71,10 @@ void update_rioters(rioter *crowd, int n, lua_State *L) {
   }
 }
 
-int get_crowd(lua_State *l) {
-  lua_pushlightuserdata(l, crowd);
-  return 1;
+int get_crowd(lua_State *L) {
+  lua_pushlightuserdata(L, crowd);
+  lua_pushinteger(L, crowdsize);
+  return 2;
 }
 
 lua_State* init_lua() {
@@ -80,6 +83,9 @@ lua_State* init_lua() {
   luaL_dofile(L, "crowd.lua");
   lua_register(L, "getinfo", getinfo);
   lua_register(L, "setinfo", setinfo);
+  lua_register(L, "get_prox_rioters", get_prox_rioters);
+  lua_register(L, "get_crowd", get_crowd);
+  lua_register(L, "get_rioter_at_index", get_rioter_at_index);
   lua_pushinteger(L, SCREEN_W);
   lua_setglobal(L, "SCREEN_W");
   lua_pushinteger(L, SCREEN_H);
